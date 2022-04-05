@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="OrderAggregate" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RushToPurchase.Domain.SharedKernel\RushToPurchase.Domain.SharedKernel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FreeSql" Version="3.0.100" />
+  </ItemGroup>
+
+</Project>

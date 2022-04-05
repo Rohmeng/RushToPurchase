@@ -1,0 +1,120 @@
+{
+    "ConnectionStrings": {
+      "DefaultDB": "0",
+      "DataType": {
+        "MySql": 0,
+        "SqlServer": 1,
+        "PostgreSQL": 2,
+        "Sqlite": 3
+      },
+      "MySql": "server=192.168.31.122;user id=root;password=qwer1234;port=3306;database=eshop;SslMode=none;",
+      "SqlServer": "Data Source=.;User ID=sa;Password=123456;Integrated Security=True;Initial Catalog=LinCMS;Pooling=true;Min Pool Size=1",
+      "PostgreSQL": "Host=192.168.31.122;Port=5432;Username=postgres;Password=123456; Database=eshop;Pooling=true;Minimum Pool Size=1",
+      "Sqlite": "Data Source=|DataDirectory|\\eshop.db; Attachs=eshop.db; Pooling=true;Min Pool Size=1",
+      "CsRedis": "192.168.31.122:6379,defaultDatabase=0",
+      "rabbitmq": "amqp://admin:qwer1234@192.168.31.122:5672"
+    },
+    "easycaching": {
+      "csredis": {
+        "MaxRdSecond": 120,
+        "EnableLogging": true,
+        "LockMs": 5000,
+        "SleepMs": 300,
+        "dbconfig": {
+          "ConnectionStrings":[
+            "192.168.31.122:6379,defaultDatabase=0"
+          ],
+          "ReadOnly": false
+        },
+        "SerializerName": "msgpack"
+      }
+    },
+    "Logging": {
+      "LogLevel": {
+        "Default": "Error",
+        "Microsoft": "Error"
+      }
+    },
+    "AllowedHosts": "*",
+    "RateLimitRules": ["CreateOptimisticOrder", "test"],
+    "AuditValue": {
+      "Enable": false
+    },
+    "CAP": {
+      "DefaultStorage": "0",
+      "DefaultMessageQueue": "0",
+      "Storage": {
+        "InMemoryStorage": 0,
+        "MySql": 1,
+        "SqlServer": 2
+      },
+      "MessageQueue": {
+        "InMemoryQueue": 0,
+        "RabbitMQ": 1
+      },
+      "RabbitMQ": {
+        "HostName": "192.168.31.122",
+        "UserName": "admin",
+        "Password": "123456",
+        "Port": 5672,
+        "VirtualHost": "/admin"
+      }
+    },
+    "Serilog": {
+      "Using": [
+        "Serilog.Sinks.Console",
+        "Serilog.Sinks.File",
+        "Serilog.Sinks.MariaDB"
+      ],
+      "MinimumLevel": {
+        "Default": "Information",
+        "Override": {
+          "Microsoft": "Information",
+          "System": "Warning"
+        }
+      },
+      "WriteTo": [
+        {
+          "Name": "File",
+          "Args": {
+            "path": "Logs/log.txt",
+            "rollingInterval": "Day"
+          }
+        },
+        {
+          "Name": "Console",
+          "Args": {
+            "theme": "Serilog.Sinks.SystemConsole.Themes.AnsiConsoleTheme::Code, Serilog.Sinks.Console",
+            "outputTemplate": "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} <s:{SourceContext}>{NewLine}{Exception}"
+          }
+        },
+        {
+          "Name": "MariaDB",
+          "Args": {
+            "connectionString": "Data Source=192.168.31.122;Port=3306;User ID=root;Password=qwer1234;Initial Catalog=eshop;Charset=utf8mb4;SslMode=none;Max pool size=1;Connection LifeTime=20",
+            "autoCreateTable": true,
+            "tableName": "app_serilog",
+            "restrictedToMinimumLevel": "Information",
+            "batchPostingLimit": 4,
+            "period": "0.00:00:03",
+            "options": {
+              "PropertiesToColumnsMapping": {
+                "Exception": "exception",
+                "Level": "level",
+                "Message": "message",
+                "MessageTemplate": "message_template",
+                "Properties": "properties",
+                "Timestamp": "timestamp"
+              },
+              "TimestampInUtc": false,
+              "ExcludePropertiesWithDedicatedColumn": true,
+              "EnumsAsInts": true,
+              "LogRecordsCleanupFrequency": "0.02:00:00",
+              "LogRecordsExpiration": "31.00:00:00"
+            }
+          }
+        }
+      ]
+    }
+  }
+  

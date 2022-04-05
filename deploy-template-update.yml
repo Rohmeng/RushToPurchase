@@ -1,0 +1,208 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: purchase-api-7c6b556fdd-dgrnl
+  generateName: purchase-api-7c6b556fdd-
+  namespace: aspnetcore
+  uid: a4c0d0c2-d214-47c2-8002-2e62cf21dd85
+  resourceVersion: '262556'
+  creationTimestamp: '2022-03-27T14:31:28Z'
+  labels:
+    name: purchase-api
+    pod-template-hash: 7c6b556fdd
+  ownerReferences:
+    - apiVersion: apps/v1
+      kind: ReplicaSet
+      name: purchase-api-7c6b556fdd
+      uid: c1bbb49f-cdf5-4f26-af06-f5866e815309
+      controller: true
+      blockOwnerDeletion: true
+  managedFields:
+    - manager: kube-controller-manager
+      operation: Update
+      apiVersion: v1
+      time: '2022-03-27T14:31:28Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:generateName: {}
+          f:labels:
+            .: {}
+            f:name: {}
+            f:pod-template-hash: {}
+          f:ownerReferences:
+            .: {}
+            k:{"uid":"c1bbb49f-cdf5-4f26-af06-f5866e815309"}:
+              .: {}
+              f:apiVersion: {}
+              f:blockOwnerDeletion: {}
+              f:controller: {}
+              f:kind: {}
+              f:name: {}
+              f:uid: {}
+        f:spec:
+          f:containers:
+            k:{"name":"purchase-api"}:
+              .: {}
+              f:image: {}
+              f:imagePullPolicy: {}
+              f:name: {}
+              f:ports:
+                .: {}
+                k:{"containerPort":7021,"protocol":"TCP"}:
+                  .: {}
+                  f:containerPort: {}
+                  f:protocol: {}
+              f:resources:
+                .: {}
+                f:limits:
+                  .: {}
+                  f:cpu: {}
+                  f:memory: {}
+                f:requests:
+                  .: {}
+                  f:cpu: {}
+                  f:memory: {}
+              f:terminationMessagePath: {}
+              f:terminationMessagePolicy: {}
+          f:dnsPolicy: {}
+          f:enableServiceLinks: {}
+          f:restartPolicy: {}
+          f:schedulerName: {}
+          f:securityContext: {}
+          f:terminationGracePeriodSeconds: {}
+    - manager: kubelet
+      operation: Update
+      apiVersion: v1
+      time: '2022-03-27T14:31:31Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:status:
+          f:conditions:
+            k:{"type":"ContainersReady"}:
+              .: {}
+              f:lastProbeTime: {}
+              f:lastTransitionTime: {}
+              f:status: {}
+              f:type: {}
+            k:{"type":"Initialized"}:
+              .: {}
+              f:lastProbeTime: {}
+              f:lastTransitionTime: {}
+              f:status: {}
+              f:type: {}
+            k:{"type":"Ready"}:
+              .: {}
+              f:lastProbeTime: {}
+              f:lastTransitionTime: {}
+              f:status: {}
+              f:type: {}
+          f:containerStatuses: {}
+          f:hostIP: {}
+          f:phase: {}
+          f:podIP: {}
+          f:podIPs:
+            .: {}
+            k:{"ip":"10.1.0.71"}:
+              .: {}
+              f:ip: {}
+          f:startTime: {}
+spec:
+  volumes:
+    - name: kube-api-access-rkghf
+      projected:
+        sources:
+          - serviceAccountToken:
+              expirationSeconds: 3607
+              path: token
+          - configMap:
+              name: kube-root-ca.crt
+              items:
+                - key: ca.crt
+                  path: ca.crt
+          - downwardAPI:
+              items:
+                - path: namespace
+                  fieldRef:
+                    apiVersion: v1
+                    fieldPath: metadata.namespace
+        defaultMode: 420
+  containers:
+    - name: purchase-api
+      image: rush-to-purchase-api:6.0
+      ports:
+        - containerPort: 7021
+          protocol: TCP
+      resources:
+        limits:
+          cpu: 500m
+          memory: 128Mi
+        requests:
+          cpu: 500m
+          memory: 128Mi
+      volumeMounts:
+        - name: kube-api-access-rkghf
+          readOnly: true
+          mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      imagePullPolicy: IfNotPresent
+  restartPolicy: Always
+  terminationGracePeriodSeconds: 30
+  dnsPolicy: ClusterFirst
+  serviceAccountName: default
+  serviceAccount: default
+  nodeName: docker-desktop
+  securityContext: {}
+  schedulerName: default-scheduler
+  tolerations:
+    - key: node.kubernetes.io/not-ready
+      operator: Exists
+      effect: NoExecute
+      tolerationSeconds: 300
+    - key: node.kubernetes.io/unreachable
+      operator: Exists
+      effect: NoExecute
+      tolerationSeconds: 300
+  priority: 0
+  enableServiceLinks: true
+  preemptionPolicy: PreemptLowerPriority
+status:
+  phase: Running
+  conditions:
+    - type: Initialized
+      status: 'True'
+      lastProbeTime: null
+      lastTransitionTime: '2022-03-27T14:31:29Z'
+    - type: Ready
+      status: 'True'
+      lastProbeTime: null
+      lastTransitionTime: '2022-03-27T14:31:31Z'
+    - type: ContainersReady
+      status: 'True'
+      lastProbeTime: null
+      lastTransitionTime: '2022-03-27T14:31:31Z'
+    - type: PodScheduled
+      status: 'True'
+      lastProbeTime: null
+      lastTransitionTime: '2022-03-27T14:31:29Z'
+  hostIP: 192.168.65.4
+  podIP: 10.1.0.71
+  podIPs:
+    - ip: 10.1.0.71
+  startTime: '2022-03-27T14:31:29Z'
+  containerStatuses:
+    - name: purchase-api
+      state:
+        running:
+          startedAt: '2022-03-27T14:31:31Z'
+      lastState: {}
+      ready: true
+      restartCount: 0
+      image: rush-to-purchase-api:6.0
+      imageID: >-
+        docker://sha256:1e92ff5cb4c73da5885616ec228e66d012ca110cc30b44302135c6bf21f059e7
+      containerID: >-
+        docker://a8e316f29d7626aa055375e951d6cc593d06d208a733826264a936e62cd9ed57
+      started: true
+  qosClass: Guaranteed

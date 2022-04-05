@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+
+# Deployment元信息
+metadata:
+  name: purchase-api # 名称不能使用下划线
+  namespace: aspnetcore
+  labels:
+    name: purchase-api # deployment标签，k-v格式，可以设置多个
+
+# Deployment管理的Pod信息
+spec:
+  replicas: 3 # 部署的应用服务副本数量
+  revisionHistoryLimit: 5 # rs历史版本保留数量，默认10
+  # Pod选择器，当前Deployment管理哪些Pod
+  selector:
+    matchLabels:
+      name: purchase-api
+  strategy: #镜像更新策略
+    type: RollingUpdate  #滚动更新策略，默认
+    rollingUpdate:  #滚动更新
+      maxSurge: 50% #最大额外可以存在的副本数，可以为百分比，也可以为整数
+      maxUnavailable: 50% #最大不可用状态的pod的最大值，可以为百分比，也可以为整数
+  #模板，当副本数量不足时，会根据下面的模板创建pod副本
+  template:
+    metadata:
+      labels:
+        name: purchase-api
+    spec:
+      containers:
+      - name: purchase-api # 容器名称，名称不能使用下划线
+        image: rush-to-purchase-api:6.0
+        ports:
+        - containerPort: 7021
+        imagePullPolicy: IfNotPresent # 镜像拉取策略
+        # 容器资源设置；
+        resources:
+          # k8s调度Pod时使用requests设置的资源需求计算；
+          requests:        
+            memory: "128Mi" # 容器可使用的内存资源，单位byte，支持的单位：Ei、Pi、Ti、Gi、Mi、Ki；     
+            cpu: "500m" # 容器使用的CPU资源，单位个，250m代表该容器需要250/1000=0.25个CPU；
+          # 设置Cgroups时使用limits值计算，推荐requests和limits保持一致；
+          limits:        
+            memory: "128Mi"        
+            cpu: "500m"
+      restartPolicy: Always # Pod重启策略
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: purchase-api
+  namespace: aspnetcore
+spec:
+  type: NodePort #将Service通过指定的Node上的端口暴露给外部，通过此方法，就可以在集群外部访问服务。
+  ports:
+    - port: 7021 #Service服务端口
+      targetPort: 7021 #Pod容器暴露的端口
+      nodePort: 30021 #映射到宿主机的端口 范围：30000-32767
+  selector:
+    name: purchase-api
